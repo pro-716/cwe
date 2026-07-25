@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>استوديو التاجر | LuxeStore</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'IBM Plex Sans Arabic'; background-color: #09090b; color: #fff; }
+        .ultra-glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.05); }
+    </style>
+</head>
+<body class="min-h-screen p-4 flex flex-col items-center justify-center">
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none"><div class="absolute top-[20%] left-[30%] w-[600px] h-[600px] bg-violet-600 rounded-full mix-blend-screen filter blur-[150px] opacity-20"></div></div>
+
+    <!-- Login Section -->
+    <div id="loginSection" class="ultra-glass p-8 rounded-3xl w-full max-w-md text-center shadow-2xl">
+        <div class="text-5xl mb-4">🔐</div>
+        <h2 class="text-2xl font-bold mb-6">دخول التاجر</h2>
+        <input type="text" id="shopNameInput" placeholder="اسم المحل التجاري" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 mb-4 text-center outline-none focus:border-violet-500 transition">
+        <input type="text" id="shopAddress" placeholder="عنوان المحل الكامل" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 mb-6 text-center outline-none focus:border-violet-500 transition">
+        <button id="loginBtn" class="w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 py-3 rounded-xl font-bold hover:scale-105 transition-all">فتح المتجر</button>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboardSection" class="hidden w-full max-w-6xl mt-10">
+        <header class="flex flex-col md:flex-row justify-between items-center mb-8 border-b border-white/10 pb-6 gap-4">
+            <div>
+                <h1 class="text-3xl font-bold">مرحباً، <span id="shopTitle" class="text-fuchsia-400"></span></h1>
+                <p id="shopAddrDisplay" class="text-white/50 text-sm mt-1"></p>
+            </div>
+            <div class="ultra-glass px-6 py-2 rounded-full text-sm font-bold border-emerald-500/30">حالة المتجر: <span class="text-emerald-400">نشط ✅</span></div>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Product Upload Section -->
+            <div class="ultra-glass p-6 rounded-3xl shadow-xl">
+                <h2 class="text-xl font-bold mb-6 text-violet-400">📦 إضافة منتج جديد</h2>
+                <div class="space-y-4">
+                    <input type="text" id="pName" placeholder="اسم المنتج" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 outline-none focus:border-violet-500 transition">
+                    <div class="grid grid-cols-2 gap-4">
+                        <input type="number" id="pPrice" placeholder="السعر (د.ع)" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 outline-none focus:border-violet-500 transition">
+                        <input type="number" id="pQty" placeholder="الكمية المتوفرة" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 outline-none focus:border-violet-500 transition">
+                    </div>
+                    <select id="pCategory" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 outline-none focus:border-violet-500 transition text-white/70">
+                        <option value="رجالي">رجالي 👔</option>
+                        <option value="نسائي">نسائي 👗</option>
+                        <option value="أطفال">أطفال 👶</option>
+                        <option value="أحذية">أحذية 👟</option>
+                        <option value="تيشيرتات">تيشيرتات 👕</option>
+                        <option value="إلكترونيات">إلكترونيات 📱</option>
+                        <option value="ساعات">ساعات ⌚</option>
+                        <option value="عطور">عطور ✨</option>
+                        <option value="إكسسوارات">إكسسوارات 💍</option>
+                        <option value="شتوي">شتوي ❄️</option>
+                        <option value="صيفي">صيفي ☀️</option>
+                    </select>
+                    <textarea id="pDesc" placeholder="وصف تفصيلي للمنتج..." class="w-full bg-white/5 border border-white/10 rounded-xl p-3 h-24 outline-none focus:border-violet-500 transition"></textarea>
+                    
+                    <div class="relative group">
+                        <label class="block w-full h-24 bg-black/20 border-2 border-dashed border-violet-500/50 rounded-xl flex flex-col justify-center items-center cursor-pointer hover:bg-white/5 transition">
+                            <span id="imgStatus" class="text-white/50 text-sm">📸 ارفع صورة (اختياري)</span>
+                            <input type="file" id="pImage" class="hidden" accept="image/*">
+                        </label>
+                    </div>
+                    <button id="uploadBtn" class="w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 py-3 rounded-xl font-bold shadow-lg hover:shadow-fuchsia-500/30 transition-all">نشر في المتجر 🚀</button>
+                </div>
+            </div>
+
+            <!-- Orders Management -->
+            <div class="ultra-glass p-6 rounded-3xl shadow-xl border-2 border-fuchsia-500/20">
+                <h2 class="text-xl font-bold mb-6 text-fuchsia-400">🔴 طلبات الزبائن الجديدة</h2>
+                <div id="ordersList" class="space-y-4 max-h-[500px] overflow-y-auto pr-2"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import pb from './pocketbase-config.js';
+
+        let currentShop = { name: "", address: "" };
+
+        document.getElementById('loginBtn').onclick = () => {
+            const name = document.getElementById('shopNameInput').value;
+            const addr = document.getElementById('shopAddress').value;
+            if (!name || !addr) return alert("أكمل البيانات!");
+            currentShop = { name, address: addr };
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('dashboardSection').classList.remove('hidden');
+            document.getElementById('shopTitle').innerText = name;
+            document.getElementById('shopAddrDisplay').innerText = "📍 " + addr;
+            listenToOrders();
+        };
+
+        document.getElementById('pImage').onchange = (e) => {
+            if(e.target.files[0]) document.getElementById('imgStatus').innerText = "✅ صورة مختارة: " + e.target.files[0].name;
+        };
+
+        document.getElementById('uploadBtn').onclick = async () => {
+            const name = document.getElementById('pName').value;
+            const price = document.getElementById('pPrice').value;
+            const qty = document.getElementById('pQty').value;
+            const cat = document.getElementById('pCategory').value;
+            const desc = document.getElementById('pDesc').value;
+            const file = document.getElementById('pImage').files[0];
+            const btn = document.getElementById('uploadBtn');
+
+            if (!name || !price || !qty) return alert("أكمل البيانات الأساسية!");
+            btn.innerText = "جاري النشر... ⏳";
+            btn.disabled = true;
+
+            try {
+                const formData = new FormData();
+                formData.append('name', name);
+                formData.append('price', price);
+                formData.append('quantity', qty);
+                formData.append('category', cat);
+                formData.append('description', desc);
+                formData.append('shopName', currentShop.name);
+                formData.append('shopAddress', currentShop.address);
+                if (file) formData.append('image', file);
+
+                await pb.collection('products').create(formData);
+                alert("تم النشر بنجاح! 🎉");
+                location.reload();
+            } catch (e) {
+                alert("خطأ: " + e.message);
+            } finally {
+                btn.innerText = "نشر في المتجر 🚀";
+                btn.disabled = false;
+            }
+        };
+
+        function listenToOrders() {
+            pb.collection('orders').subscribe('*', () => refreshOrders());
+            refreshOrders();
+        }
+
+        async function refreshOrders() {
+            const records = await pb.collection('orders').getFullList({ filter: `shopName='${currentShop.name}'` });
+            const list = document.getElementById('ordersList');
+            list.innerHTML = records.map(o => `
+                <div class="bg-white/5 p-4 rounded-2xl border border-white/10">
+                    <div class="flex justify-between mb-2"><p class="font-bold text-fuchsia-400">${o.customerName}</p><span>${o.status}</span></div>
+                    <p class="text-xs text-white/60 mb-2">📞 ${o.customerPhone} | 📍 ${o.customerAddress}</p>
+                    <div class="bg-black/30 p-2 rounded-xl mb-3 text-xs text-emerald-400 font-bold">${o.items}</div>
+                    <button onclick="markReady('${o.id}')" class="w-full bg-blue-600 py-2 rounded-xl text-sm font-bold">تجهيز للمندوب ✅</button>
+                </div>
+            `).join('') || '<p class="text-center text-white/50 py-10">لا توجد طلبات حالياً.</p>';
+        }
+
+        window.markReady = async (id) => {
+            await pb.collection('orders').update(id, { status: "جاهز للتوصيل" });
+            refreshOrders();
+        };
+    </script>
+</body>
+</html>
